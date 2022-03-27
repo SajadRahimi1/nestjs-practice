@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { Repository } from 'typeorm';
+import { Repository,Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
 
@@ -18,7 +18,7 @@ export class UsersService {
     }
 
     find(email:string){
-        return this.repository.find({where:{email}});
+        return this.repository.findBy({email:Like(email)});
     }
 
     async update(id:number, attrs:Partial<User>){

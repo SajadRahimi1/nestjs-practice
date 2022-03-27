@@ -9,9 +9,16 @@ export class UsersController {
         console.log(body);
         this.userService.createUser(body.email, body.password);
     }
+
+
     @Get("/:id")
     findUser(@Param('id') id:string){
         return this.userService.findOne(parseInt(id));
+    }
+
+    @Get()
+    findAllUser(@Query('email') email:string){
+        return this.userService.find(email);
     }
 
 }
