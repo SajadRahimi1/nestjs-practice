@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable,NotFoundException } from '@nestjs/common';
 import { Repository,Like } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { User } from './user.entity';
@@ -13,8 +13,12 @@ export class UsersService {
         return this.repository.save(user);
     }
 
-    findOne(id:number){
-        return this.repository.findOne({where:{id}}); 
+    async findOne(id:number){
+        const user = await this.repository.findOne({where:{id}});
+        if(!user){
+            throw new NotFoundException('کاربری یافت نشد');
+        }
+        return user;
     }
 
     find(email:string){
@@ -24,7 +28,7 @@ export class UsersService {
     async update(id:number, attrs:Partial<User>){
         const user = await this.findOne(id);
         if(!user){
-            throw new Error('user not found');
+            throw new NotFoundException('کاربری یافت نشد');
         }
         Object.assign(user,attrs);
         return this.repository.save(user);
@@ -33,7 +37,7 @@ export class UsersService {
     async remove(id:number){
         const user = await this.findOne(id);
         if(!user){
-            throw new Error('user not found');
+            throw new NotFoundException('کاربری یافت نشد');
         }
         return this.repository.remove(user);
     }
