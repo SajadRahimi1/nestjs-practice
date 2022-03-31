@@ -32,4 +32,9 @@ export class UsersController {
     updateUser(@Param('id') id: string, @Body() body: UpdateUserDto) {
         return this.userService.update(parseInt(id), body);
     }
+
+    @Post('/signin')
+    signin(@Body() body:CreateUserDTO){
+        return this.authService.signin(body.email,body.password);
+    }
 }
